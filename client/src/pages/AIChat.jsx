@@ -11,14 +11,7 @@ const AIChat = () => {
       sender: "ai",
       text: "Hello! 👋 How can I help you today?",
     },
-    {
-        sender: "user",
-        text: " yes good morning ji "
-    },
-    {
-        sender: "ai",
-        text: "Bol na ji "  
-    }
+  
   ]);
   const [loading, setLoading] = useState(false);
 
