@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FaUserCircle, FaBars, FaTimes } from "react-icons/fa";
 
 const navLinks = [
@@ -14,7 +14,25 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [user, setUser] = useState(null);
   const dropdownRef = useRef();
+  const navigate = useNavigate();
+
+  // Read auth state from localStorage and keep it reactive
+  useEffect(() => {
+    const syncUser = () => {
+      const stored = localStorage.getItem("user");
+      try {
+        setUser(stored ? JSON.parse(stored) : null);
+      } catch {
+        setUser(null);
+      }
+    };
+
+    syncUser();
+    window.addEventListener("storage", syncUser);
+    return () => window.removeEventListener("storage", syncUser);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -34,6 +52,14 @@ const Navbar = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    setOpen(false);
+    navigate("/login");
+  };
 
   return (
     <nav
@@ -83,27 +109,51 @@ const Navbar = () => {
 
             {open && (
               <div className="premium-panel absolute right-0 z-50 mt-2 w-48 overflow-hidden rounded-2xl border border-[#D4AF37]/30 bg-[#1E0F2B]/95 text-white shadow-2xl backdrop-blur-2xl">
-                <Link
-                  to="/register"
-                  className="block px-4 py-2.5 text-xs tracking-wider uppercase hover:bg-[#D4AF37]/20 hover:text-[#F6E27A] transition"
-                  onClick={() => setOpen(false)}
-                >
-                  Register Seeker
-                </Link>
-                <Link
-                  to="/login"
-                  className="block px-4 py-2.5 text-xs tracking-wider uppercase hover:bg-[#D4AF37]/20 hover:text-[#F6E27A] transition"
-                  onClick={() => setOpen(false)}
-                >
-                  Seeker Login
-                </Link>
-                <Link
-                  to="/dashboard"
-                  className="block px-4 py-2.5 text-xs tracking-wider uppercase hover:bg-[#D4AF37]/20 hover:text-[#F6E27A] transition border-t border-white/10"
-                  onClick={() => setOpen(false)}
-                >
-                  Healer Portal
-                </Link>
+                {user ? (
+                  <>
+                    <div className="px-4 py-2.5 border-b border-white/10">
+                      <p className="text-[0.65rem] text-white/40 uppercase tracking-wider">Signed in as</p>
+                      <p className="text-xs text-[#F6E27A] font-semibold truncate">{user.username}</p>
+                    </div>
+                    <Link
+                      to="/dashboard"
+                      className="block px-4 py-2.5 text-xs tracking-wider uppercase hover:bg-[#D4AF37]/20 hover:text-[#F6E27A] transition"
+                      onClick={() => setOpen(false)}
+                    >
+                      Healer Portal
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2.5 text-xs tracking-wider uppercase hover:bg-red-500/20 hover:text-red-300 transition border-t border-white/10"
+                    >
+                      Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/register"
+                      className="block px-4 py-2.5 text-xs tracking-wider uppercase hover:bg-[#D4AF37]/20 hover:text-[#F6E27A] transition"
+                      onClick={() => setOpen(false)}
+                    >
+                      Register Seeker
+                    </Link>
+                    <Link
+                      to="/login"
+                      className="block px-4 py-2.5 text-xs tracking-wider uppercase hover:bg-[#D4AF37]/20 hover:text-[#F6E27A] transition"
+                      onClick={() => setOpen(false)}
+                    >
+                      Seeker Login
+                    </Link>
+                    <Link
+                      to="/dashboard"
+                      className="block px-4 py-2.5 text-xs tracking-wider uppercase hover:bg-[#D4AF37]/20 hover:text-[#F6E27A] transition border-t border-white/10"
+                      onClick={() => setOpen(false)}
+                    >
+                      Healer Portal
+                    </Link>
+                  </>
+                )}
               </div>
             )}
           </div>

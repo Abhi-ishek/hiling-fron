@@ -1,13 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { FaCalendarCheck, FaHandsHelping, FaUsers, FaChartLine, FaArrowLeft } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { FaCalendarCheck, FaHandsHelping, FaUsers, FaChartLine, FaArrowLeft, FaSignOutAlt } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+
+    if (!token || !storedUser) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      setUser(JSON.parse(storedUser));
+    } catch {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
+
+  if (!user) return null;
+
   return (
     <div className="flex min-h-screen bg-gradient-to-b from-[#12071A] via-[#2A1638] to-[#190B24] text-white">
       {/* Sidebar */}
-      <aside className="w-64 border-r border-[#D4AF37]/20 bg-[#1A0B24]/90 backdrop-blur-2xl p-6 hidden md:block">
+      <aside className="w-64 border-r border-[#D4AF37]/20 bg-[#1A0B24]/90 backdrop-blur-2xl p-6 hidden md:flex md:flex-col">
         <div className="flex items-center gap-3 mb-8">
           <img
             src="/images/logo.jpg"
@@ -32,10 +59,16 @@ const Dashboard = () => {
           </a>
         </nav>
 
-        <div className="mt-auto pt-24">
+        <div className="mt-auto pt-24 flex flex-col gap-3">
           <Link to="/" className="flex items-center gap-2 text-xs text-white/50 hover:text-[#D4AF37] transition">
             <FaArrowLeft /> Return to Sanctuary
           </Link>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 text-xs text-white/50 hover:text-red-400 transition"
+          >
+            <FaSignOutAlt /> Sign Out
+          </button>
         </div>
       </aside>
 
@@ -52,7 +85,7 @@ const Dashboard = () => {
             Healer Management Portal
           </h1>
           <p className="text-sm text-white/70 mt-1">
-            Track active reservations, schedule updates, and spiritual offerings.
+            Welcome back, <span className="text-[#F6E27A] font-semibold">{user.username}</span>. Track active reservations, schedule updates, and spiritual offerings.
           </p>
         </motion.div>
 
