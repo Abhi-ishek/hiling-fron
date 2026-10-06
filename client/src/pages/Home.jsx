@@ -11,7 +11,7 @@ const Home = () => {
     <>
       <section className="relative flex min-h-[88vh] items-center overflow-hidden lg:min-h-[96vh]">
         <video autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover object-bottom">
-          <source src="/video/home.mp4" type="video/mp4" />
+          <source src="/video/asdfg.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
 
