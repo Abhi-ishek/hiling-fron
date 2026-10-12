@@ -7,14 +7,14 @@ const products = [
     name: "Raw Rose Quartz Crystals",
     price: "$32 USD",
     category: "Raw Crystals",
-    image: null,
+    image: "/images/1.jpg",
   },
   {
     id: "raw-clear-quartz-crystals",
     name: "Raw Clear Quartz Crystals",
     price: "$30 USD",
     category: "Raw Crystals",
-    image: null,
+    image:"/images/clear-quartz.webp",
   },
   {
     id: "raw-amethyst-crystals",
@@ -137,6 +137,8 @@ const ProductImage = ({ product }) => {
         className="absolute inset-0 z-[1] overflow-hidden bg-[radial-gradient(circle_at_30%_20%,rgba(241,211,107,0.24),transparent_30%),radial-gradient(circle_at_70%_72%,rgba(141,90,166,0.32),transparent_34%),linear-gradient(135deg,rgba(74,44,93,0.96),rgba(18,8,27,0.98))]"
         aria-hidden="true"
       >
+<p> asdfghjklxcvbnm,</p>
+        
         <div className="absolute inset-5 rounded-[1.5rem] border border-[#D4AF37]/25 bg-white/[0.035] shadow-[inset_0_0_60px_rgba(212,175,55,0.08)]" />
         <div className="absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 shadow-[0_0_50px_rgba(212,175,55,0.18)]" />
         <div className="absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-2xl border border-white/15 bg-white/[0.04]" />
